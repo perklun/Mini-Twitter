@@ -60,6 +60,8 @@ public class TwitterClient extends OAuthBaseClient {
 		Log.d("DEBUG MAX_ID: ", String.valueOf(max_id));
 		//Execute the request
 		getClient().get(apiUrl, params, handler);
+		Log.d("Get completed: ", apiUrl);
+
 	}
 
 	//Composing a tweet

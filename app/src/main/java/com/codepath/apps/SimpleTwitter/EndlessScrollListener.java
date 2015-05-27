@@ -53,7 +53,6 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             previousTotalItemCount = totalItemCount;
             currentPage++;
         }
-
         // If it isn’t currently loading, we check to see if we have breached
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.

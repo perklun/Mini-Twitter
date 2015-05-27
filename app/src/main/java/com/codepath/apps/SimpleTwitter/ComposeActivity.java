@@ -50,10 +50,8 @@ public class ComposeActivity extends ActionBarActivity {
         tvCount = (TextView) findViewById(R.id.tvCount);
         tvUser_compose = (TextView) findViewById(R.id.tvUser_compose);
         ivProfile_compose = (ImageView) findViewById(R.id.ivProfile_compose);
-
         populateUserDetails();
         Log.d("DEBUG compose ", Profile_image_url + " " + name);
-
 
         //keeps track of the number characters typed in the line
         TextWatcher TextEditorWatcher = new TextWatcher() {

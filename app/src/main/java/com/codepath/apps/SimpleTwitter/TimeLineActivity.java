@@ -44,18 +44,15 @@ public class TimeLineActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
-
-        listOfTweets = new ArrayList<Tweet>();
-
         client = TwitterApplication.getRestClient();
-
+        //set up views
+        listOfTweets = new ArrayList<Tweet>();
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 populateTimeLine(count, since_id, listOfTweets.get(listOfTweets.size()-1).getUid());
                 Log.d("IN onLoadMore ", String.valueOf(listOfTweets.size()));
-
             }
         });
         tweetsAdapter = new TweetsArrayAdapter(this, listOfTweets);
@@ -64,30 +61,30 @@ public class TimeLineActivity extends ActionBarActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
+                // Code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 if(offline == 0){
-                listOfTweets.clear();
-                tweetsAdapter.notifyDataSetChanged();
-                since_id = -1;
-                max_id = -1;
-                populateTimeLine(count, since_id, max_id);
+                    listOfTweets.clear();
+                    since_id = -1;
+                    max_id = -1;
+                    populateTimeLine(count, since_id, max_id);
+                    Log.d("IN refresh ", String.valueOf(listOfTweets.size()));
                     tweetsAdapter.notifyDataSetChanged();
-                Log.d("IN refresh ", String.valueOf(listOfTweets.size()));
-                swipeContainer.setRefreshing(false);}
+                    swipeContainer.setRefreshing(false);
+                }
                 else{
                     Intent i = new Intent(TimeLineActivity.this, LoginActivity.class);
                     startActivity(i);
                 }
             }
-        });
+        }
+        );
         //configure refresh colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
         //if in offline mode, load from sql
         offline = getIntent().getIntExtra("offline", 0);
         if(offline == 1){
@@ -95,6 +92,7 @@ public class TimeLineActivity extends ActionBarActivity {
             List<Tweet> old_list = Tweet.getAll();
             if(old_list.size() > 1){
                 listOfTweets.addAll(old_list);
+                tweetsAdapter.notifyDataSetChanged();
             }else{
                 Toast.makeText(this, "First load: no tweets yet!", Toast.LENGTH_SHORT).show();
             }
@@ -102,16 +100,13 @@ public class TimeLineActivity extends ActionBarActivity {
             populateTimeLine(count, since_id, max_id); //launch initial list
         }
         Log.d("IN onCreate ", String.valueOf(listOfTweets.size()));
-
-        Log.d("SQL: ", Tweet.getAll().toString());
-
     }
 
     //send API request to populate time and fill listview
     //JSON response starts with [ ] which means it is a JSONArray
     private void populateTimeLine(int count, long since_id, long max_id) {
-        if(isOnline() == true) {
-          //  if(isOnline() == true && isNetworkAvailable() == true) {
+        if(isNetworkAvailable() == true) {
+            //  if(isOnline() == true && isNetworkAvailable() == true) {
             client.getHomeTimeLine(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -119,17 +114,14 @@ public class TimeLineActivity extends ActionBarActivity {
                     //deserialize JSON and create models, and load model data in listView
                     listOfTweets.addAll(Tweet.fromJSONArray(response));
                     Log.d("DEBUG JSONARRAY List", listOfTweets.toString());
-                    tweetsAdapter.notifyDataSetChanged();
-                    //              swipeContainer.setRefreshing(false);
                 }
-
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                Log.d("DEBUG JSONARRAY Failure", errorResponse.toString());
+                     Log.d("DEBUG JSONObject Fail:", errorResponse.toString());
                 }
             }, count, since_id, max_id);
             if (listOfTweets.size() > 1) {
-                //sets since_id to for infinite scrolling
+                //sets max_id to for infinite scrolling
                 this.max_id = listOfTweets.get(listOfTweets.size() - 1).getUid();
             }
             Log.d("IN method ", String.valueOf(listOfTweets.size()));
@@ -151,10 +143,10 @@ public class TimeLineActivity extends ActionBarActivity {
             Log.d("DEBUG REFRESH:", "populating new timeline");
             //clear old, relaunch time line
             listOfTweets.clear();
+            tweetsAdapter.notifyDataSetChanged();
             since_id = -1;
             max_id = -1;
             populateTimeLine(count, since_id, max_id);
-            tweetsAdapter.notifyDataSetChanged();
             Log.d("IN result ", String.valueOf(listOfTweets.size()));
         }
     }
@@ -166,9 +158,9 @@ public class TimeLineActivity extends ActionBarActivity {
         return true;
     }
 
+    //launch compose activity
     public void onComposeAction(MenuItem mi){
         Intent i = new Intent(this, ComposeActivity.class);
-
         startActivityForResult(i, REQUEST_CODE);
     }
 
