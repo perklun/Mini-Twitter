@@ -1,7 +1,6 @@
-package com.codepath.apps.SimpleTwitter;
+package com.codepath.apps.TwitterClient.activities;
 
 import android.content.Context;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
@@ -17,17 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codepath.apps.SimpleTwitter.R;
-import com.codepath.apps.SimpleTwitter.models.Tweet;
+import com.codepath.apps.TwitterClient.R;
+import com.codepath.apps.TwitterClient.TwitterApplication;
+import com.codepath.apps.TwitterClient.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import static android.widget.Toast.*;
 
@@ -135,11 +132,11 @@ public class ComposeActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+  /*      //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
+*/
         return super.onOptionsItemSelected(item);
     }
 

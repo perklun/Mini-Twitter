@@ -1,64 +1,44 @@
-package com.codepath.apps.SimpleTwitter;
+package com.codepath.apps.TwitterClient.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.codepath.apps.SimpleTwitter.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.TwitterClient.R;
+import com.codepath.apps.TwitterClient.fragments.HomeTimelineFragment;
+import com.codepath.apps.TwitterClient.fragments.MentionsTimelineFragment;
 
 public class TimeLineActivity extends ActionBarActivity {
 
-    private TwitterClient client;
-    private ListView lvTweets;
-    private ArrayList<Tweet> listOfTweets;
-    private TweetsArrayAdapter tweetsAdapter;
-
-    private int count = 25;
-    private long since_id = -1;
-    private long max_id = -1;
-
     public static int REQUEST_CODE = 1;
-
     private SwipeRefreshLayout swipeContainer;
-
     private int offline = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
-        client = TwitterApplication.getRestClient();
-        //set up views
-        listOfTweets = new ArrayList<Tweet>();
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeLine(count, since_id, listOfTweets.get(listOfTweets.size()-1).getUid());
-                Log.d("IN onLoadMore ", String.valueOf(listOfTweets.size()));
-            }
-        });
-        tweetsAdapter = new TweetsArrayAdapter(this, listOfTweets);
-        lvTweets.setAdapter(tweetsAdapter);
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        //get view pager
+        ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
+        //set the viewpager adapter for the pager
+        viewpager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        //find the pager sliding tabs
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        //attach the tabstrip to the viewpager
+        tabStrip.setViewPager(viewpager);
+
+      //  swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+      /*  swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Code to refresh the list here.
@@ -70,8 +50,7 @@ public class TimeLineActivity extends ActionBarActivity {
                     max_id = -1;
                     populateTimeLine(count, since_id, max_id);
                     Log.d("IN refresh ", String.valueOf(listOfTweets.size()));
-                    tweetsAdapter.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
+
                 }
                 else{
                     Intent i = new Intent(TimeLineActivity.this, LoginActivity.class);
@@ -79,9 +58,9 @@ public class TimeLineActivity extends ActionBarActivity {
                 }
             }
         }
-        );
+        ); */
         //configure refresh colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+/*        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -98,57 +77,28 @@ public class TimeLineActivity extends ActionBarActivity {
             }
         } else{
             populateTimeLine(count, since_id, max_id); //launch initial list
-        }
-        Log.d("IN onCreate ", String.valueOf(listOfTweets.size()));
+        } */
+    //    Log.d("IN onCreate ", String.valueOf(listOfTweets.size()));
     }
 
-    //send API request to populate time and fill listview
-    //JSON response starts with [ ] which means it is a JSONArray
-    private void populateTimeLine(int count, long since_id, long max_id) {
-        if(isNetworkAvailable() == true) {
-            //  if(isOnline() == true && isNetworkAvailable() == true) {
-            client.getHomeTimeLine(new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    Log.d("DEBUG JSONARRAY Success", response.toString());
-                    //deserialize JSON and create models, and load model data in listView
-                    listOfTweets.addAll(Tweet.fromJSONArray(response));
-                    Log.d("DEBUG JSONARRAY List", listOfTweets.toString());
-                }
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                     Log.d("DEBUG JSONObject Fail:", errorResponse.toString());
-                }
-            }, count, since_id, max_id);
-            if (listOfTweets.size() > 1) {
-                //sets max_id to for infinite scrolling
-                this.max_id = listOfTweets.get(listOfTweets.size() - 1).getUid();
-            }
-            Log.d("IN method ", String.valueOf(listOfTweets.size()));
-        }
-        else{
-            List<Tweet> old_list = Tweet.getAll();
-            if(old_list.size() > 1){
-                listOfTweets.addAll(old_list);
-                Toast.makeText(this, "Offline mode", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this, "No previous tweets found", Toast.LENGTH_SHORT).show();
-            }
-        }
+    public void onProfileView(MenuItem mi){
+        Intent i = new Intent(this, ProfileActivity.class);
+        //when you want to add a screenname: i.putExtra("screen_name")
+        startActivity(i);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+    /*    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             Log.d("DEBUG REFRESH:", "populating new timeline");
             //clear old, relaunch time line
-            listOfTweets.clear();
-            tweetsAdapter.notifyDataSetChanged();
+       //     listOfTweets.clear();
+        //    tweetsAdapter.notifyDataSetChanged();
             since_id = -1;
             max_id = -1;
             populateTimeLine(count, since_id, max_id);
-            Log.d("IN result ", String.valueOf(listOfTweets.size()));
-        }
+        //    Log.d("IN result ", String.valueOf(listOfTweets.size()));
+        }*/
     }
 
     @Override
@@ -170,11 +120,6 @@ public class TimeLineActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -196,5 +141,33 @@ public class TimeLineActivity extends ActionBarActivity {
             e.printStackTrace();
         }
         return false;
+    }
+    //return oder of fragments in viewpager
+    public class TweetsPagerAdapter extends FragmentPagerAdapter{
+        private String tabTitles[] = {"Home", "Mentions"};
+        //adapter gets manager to insert or remove from activity
+        public TweetsPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+        //controls order and creation of fragments within pager
+        @Override
+        public Fragment getItem(int position) {
+            //automatically cached
+            if(position == 0){
+                return new HomeTimelineFragment();
+            } else{
+                return new MentionsTimelineFragment();
+            }
+        }
+        //return tab title
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+        //how many items
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }

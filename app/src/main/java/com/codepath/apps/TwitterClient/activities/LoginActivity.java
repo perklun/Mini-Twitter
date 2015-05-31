@@ -1,4 +1,4 @@
-package com.codepath.apps.SimpleTwitter;
+package com.codepath.apps.TwitterClient.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-import com.codepath.apps.SimpleTwitter.models.Tweet;
+import com.codepath.apps.TwitterClient.R;
+import com.codepath.apps.TwitterClient.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {

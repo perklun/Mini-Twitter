@@ -1,4 +1,4 @@
-package com.codepath.apps.SimpleTwitter.models;
+package com.codepath.apps.TwitterClient.models;
 
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -21,6 +21,12 @@ public class User extends Model{
     private String screenName;
     @Column(name = "profileImageURL")
     private String profileImageURL;
+    @Column(name = "tagline")
+    private String tagline;
+    @Column(name = "followers")
+    private int followers;
+    @Column(name = "following")
+    private int following;
 
     public static User fromJSON(JSONObject object){
         User user = new User();
@@ -29,6 +35,9 @@ public class User extends Model{
             user.uid = object.getLong("id");
             user.screenName = object.getString("screen_name");
             user.profileImageURL = object.getString("profile_image_url");
+            user.tagline = object.getString("description");
+            user.followers = object.getInt("followers_count");
+            user.following = object.getInt("friends_count");
             user.save();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -50,5 +59,17 @@ public class User extends Model{
 
     public String getProfileImageURL() {
         return profileImageURL;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public String getFollowers() {
+        return String.valueOf(followers);
+    }
+
+    public String getFollowing() {
+        return String.valueOf(following);
     }
 }

@@ -9,5 +9,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Compose</string>
     <string name="title_activity_compose">Compose a tweet</string>
+    <string name="title_activity_profile">Profile</string>
 
 </resources>

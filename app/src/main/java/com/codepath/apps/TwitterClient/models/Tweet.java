@@ -1,4 +1,4 @@
-package com.codepath.apps.SimpleTwitter.models;
+package com.codepath.apps.TwitterClient.models;
 
 import android.text.format.DateUtils;
 
