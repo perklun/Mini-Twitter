@@ -1,6 +1,6 @@
 # Twitter Android App
 
-This is an Android application that uses the Twitter API to retrieve home and mention timelines. It also allow the user to compose messages. The network requests are made using Async requests. 
+This is an Android application that uses the Twitter API to retrieve home and mention timelines. It also allow the user to compose messages and view profiles. The app uses Async network requests and uses fragments.
 
 Time spent: 20 hours spent in total
 
@@ -33,7 +33,6 @@ Completed assignment 3 stories:
  * [x] Advanced: While composing a tweet, user can see a character counter with characters remaining for tweet out of 140
  * [x] Advanced: Advanced: User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
  * [x] Advanced: Tweets are persisted into sqlite and can be displayed from the local DB
-
 
 Walkthrough of all user stories:
 
