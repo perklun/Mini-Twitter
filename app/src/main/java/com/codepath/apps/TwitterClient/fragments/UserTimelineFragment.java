@@ -34,8 +34,14 @@ public class UserTimelineFragment extends TweetsListFragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeLine(listOfTweets.get(listOfTweets.size() - 1).getUid()-1);
+                showProgressBar();
+                if (listOfTweets.size() == 0){
+                    populateTimeLine(-1);
+                } else {
+                    populateTimeLine(listOfTweets.get(listOfTweets.size() - 1).getUid() - 1);
+                }
                 Log.d("onLoadMore - User: ", String.valueOf(listOfTweets.size()));
+                hideProgressBar();
             }
         });
         return v;
@@ -51,11 +57,12 @@ public class UserTimelineFragment extends TweetsListFragment {
 
     //send API request to populate time and fill listview
     //JSON response starts with [ ] which means it is a JSONArray
-    private void populateTimeLine(long max_id) {
+    @Override
+    public void populateTimeLine(long max_id) {
         String screen_name = getArguments().getString("screen_name");
         //       if(isNetworkAvailable() == true) {
         //  if(isOnline() == true && isNetworkAvailable() == true) {
-        client.getUserTimeLine(screen_name, new JsonHttpResponseHandler() {
+        client.getUserTimeLine(screen_name, max_id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("populate - User:", response.toString());
@@ -67,23 +74,6 @@ public class UserTimelineFragment extends TweetsListFragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG JSONObject Fail:", errorResponse.toString());
             }
-        }, max_id);
-       /*     if (listOfTweets.size() > 1) {
-                //sets max_id to for infinite scrolling
-                this.max_id = listOfTweets.get(listOfTweets.size() - 1).getUid();
-                tweetsAdapter.notifyDataSetChanged();
-            }
-            Log.d("IN method ", String.valueOf(listOfTweets.size()));
-            swipeContainer.setRefreshing(false);
-        }
-        else{
-           /* List<Tweet> old_list = Tweet.getAll();
-            if(old_list.size() > 1){
-                listOfTweets.addAll(old_list);
-                Toast.makeText(this, "Offline mode", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(this, "No previous tweets found", Toast.LENGTH_SHORT).show();
-            }*/
-//        }
+        });
     }
 }

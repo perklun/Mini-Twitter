@@ -2,69 +2,52 @@ package com.codepath.apps.TwitterClient.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+
+
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.TwitterClient.R;
 import com.codepath.apps.TwitterClient.fragments.HomeTimelineFragment;
 import com.codepath.apps.TwitterClient.fragments.MentionsTimelineFragment;
 
-public class TimeLineActivity extends ActionBarActivity {
 
-    public static int REQUEST_CODE = 1;
-    private SwipeRefreshLayout swipeContainer;
+public class TimeLineActivity extends MyActionBar {
+
     private int offline = 0;
+    private ViewPager viewpager;
+    private SmartFragmentStatePagerAdapter adapterViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
         //get view pager
-        ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
+        viewpager = (ViewPager) findViewById(R.id.viewpager);
         //set the viewpager adapter for the pager
-        viewpager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        adapterViewPager = new TweetsPagerAdapter(getSupportFragmentManager());
+        viewpager.setAdapter(adapterViewPager);
         //find the pager sliding tabs
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setIndicatorColor(Color.rgb(0, 172, 237));
+        tabStrip.setTextColor(Color.rgb(0, 172, 237));
         //attach the tabstrip to the viewpager
         tabStrip.setViewPager(viewpager);
 
-      //  swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-      /*  swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                if(offline == 0){
-                    listOfTweets.clear();
-                    since_id = -1;
-                    max_id = -1;
-                    populateTimeLine(count, since_id, max_id);
-                    Log.d("IN refresh ", String.valueOf(listOfTweets.size()));
-
-                }
-                else{
-                    Intent i = new Intent(TimeLineActivity.this, LoginActivity.class);
-                    startActivity(i);
-                }
-            }
-        }
-        ); */
-        //configure refresh colors
-/*        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-        //if in offline mode, load from sql
+/*
+        if in offline mode, load from sql
         offline = getIntent().getIntExtra("offline", 0);
         if(offline == 1){
             //retrieve old list
@@ -78,27 +61,18 @@ public class TimeLineActivity extends ActionBarActivity {
         } else{
             populateTimeLine(count, since_id, max_id); //launch initial list
         } */
-    //    Log.d("IN onCreate ", String.valueOf(listOfTweets.size()));
-    }
-
-    public void onProfileView(MenuItem mi){
-        Intent i = new Intent(this, ProfileActivity.class);
-        //when you want to add a screenname: i.putExtra("screen_name")
-        startActivity(i);
+        //    Log.d("IN onCreate ", String.valueOf(listOfTweets.size()));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    /*    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            Log.d("DEBUG REFRESH:", "populating new timeline");
-            //clear old, relaunch time line
-       //     listOfTweets.clear();
-        //    tweetsAdapter.notifyDataSetChanged();
-            since_id = -1;
-            max_id = -1;
-            populateTimeLine(count, since_id, max_id);
-        //    Log.d("IN result ", String.valueOf(listOfTweets.size()));
-        }*/
+       if (resultCode == RESULT_OK && requestCode == REQUEST_CODE){
+           Log.d("onActivityResult: ", "update new fragments");
+           HomeTimelineFragment fg_home_timeline = (HomeTimelineFragment) adapterViewPager.getRegisteredFragment(0);
+           fg_home_timeline.loadNewTweets();
+           MentionsTimelineFragment fg_mention_timeline = (MentionsTimelineFragment) adapterViewPager.getRegisteredFragment(1);
+           fg_mention_timeline.loadNewTweets();
+       }
     }
 
     @Override
@@ -106,12 +80,6 @@ public class TimeLineActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_time_line, menu);
         return true;
-    }
-
-    //launch compose activity
-    public void onComposeAction(MenuItem mi){
-        Intent i = new Intent(this, ComposeActivity.class);
-        startActivityForResult(i, REQUEST_CODE);
     }
 
     @Override
@@ -137,13 +105,13 @@ public class TimeLineActivity extends ActionBarActivity {
             boolean reachable = (returnVal==0);
             return reachable;
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return false;
     }
-    //return oder of fragments in viewpager
-    public class TweetsPagerAdapter extends FragmentPagerAdapter{
+
+    //return order of fragments in viewpager
+    public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
         private String tabTitles[] = {"Home", "Mentions"};
         //adapter gets manager to insert or remove from activity
         public TweetsPagerAdapter(FragmentManager fm){
@@ -155,8 +123,11 @@ public class TimeLineActivity extends ActionBarActivity {
             //automatically cached
             if(position == 0){
                 return new HomeTimelineFragment();
-            } else{
+            } else if(position == 1){
                 return new MentionsTimelineFragment();
+            }
+            else{
+                return null;
             }
         }
         //return tab title

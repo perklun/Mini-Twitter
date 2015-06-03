@@ -2,6 +2,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codepath.apps.TwitterClient.activities.ProfileActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/miTimeLine_profile"
+        android:icon="@drawable/ic_timeline"
+        app:showAsAction="ifRoom"
+        android:title="Profile"
+        android:onClick="onTimeLineView"/>
+
+
+
+    <item
+        android:id="@+id/miCompose_profile"
+        android:icon="@drawable/ic_compose"
+        app:showAsAction="ifRoom"
+        android:title="Profile"
+        android:onClick="onComposeView"/>
+
+    <item
+        android:id="@+id/miProfile_profile"
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="ifRoom"
+        android:title="Profile"
+        android:onClick="onProfileView"/>
+
 </menu>

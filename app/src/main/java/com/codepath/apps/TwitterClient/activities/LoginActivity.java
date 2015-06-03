@@ -27,7 +27,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
-
 	// OAuth authenticated successfully, launch primary authenticated activity
 	// i.e Display application "homepage"
 	@Override

@@ -4,11 +4,9 @@
     <string name="app_name">Simple Twitter</string>
     <string name="login_label">Connect to Twitter</string>
 
-    <string name="title_activity_timeline">Home TimeLine</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Compose</string>
+    <string name="title_activity_timeline">Home</string>
     <string name="title_activity_compose">Compose a tweet</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_my_action_bar">MyActionBarActivity</string>
 
 </resources>

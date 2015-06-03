@@ -3,8 +3,8 @@
     android:layout_height="match_parent"
     tools:context="com.codepath.apps.TwitterClient.activities.TimeLineActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
     >
-
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
@@ -22,3 +22,4 @@
         android:background="@android:color/white" />
 
 </RelativeLayout>
+

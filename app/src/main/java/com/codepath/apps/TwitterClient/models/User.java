@@ -27,6 +27,8 @@ public class User extends Model{
     private int followers;
     @Column(name = "following")
     private int following;
+    @Column(name = "background")
+    private String background;
 
     public static User fromJSON(JSONObject object){
         User user = new User();
@@ -38,6 +40,11 @@ public class User extends Model{
             user.tagline = object.getString("description");
             user.followers = object.getInt("followers_count");
             user.following = object.getInt("friends_count");
+            try{
+                user.background = object.getString("profile_banner_url");
+            }catch (JSONException e){
+                user.background = null;
+            }
             user.save();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -45,8 +52,7 @@ public class User extends Model{
         return user;
     }
 
-    public String getName() {
-        return name;
+    public String getName() {return name;
     }
 
     public long getUid() {
@@ -72,4 +78,6 @@ public class User extends Model{
     public String getFollowing() {
         return String.valueOf(following);
     }
+
+    public String getBackground() { return background;    }
 }

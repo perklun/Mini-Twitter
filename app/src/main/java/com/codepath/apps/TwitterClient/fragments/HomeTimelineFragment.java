@@ -34,30 +34,36 @@ public class HomeTimelineFragment extends TweetsListFragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeLine(listOfTweets.get(listOfTweets.size() - 1).getUid() - 1);
+                showProgressBar();
+                if (listOfTweets.size() == 0){
+                    populateTimeLine(-1);
+                } else {
+                    populateTimeLine(listOfTweets.get(listOfTweets.size() - 1).getUid() - 1);
+                }
                 Log.d("onLoadMore - Home: ", String.valueOf(listOfTweets.size()));
+                hideProgressBar();
             }
         });
         return v;
     }
 
     //send API request to populate time and fill listview
-    private void populateTimeLine(long max_id) {
- //       if(isNetworkAvailable() == true) {
-            //  if(isOnline() == true && isNetworkAvailable() == true) {
-            client.getHomeTimeLine(new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    Log.d("populate - Home: ", response.toString());
-                    //deserialize JSON and create models, and load model data in listView
-                    addAll(Tweet.fromJSONArray(response));
-                    tweetsAdapter.notifyDataSetChanged();
-                }
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.d("DEBUG JSONObject Fail:", errorResponse.toString());
-                }
-            }, max_id);
+    @Override
+    public void populateTimeLine(long max_id) {
+        //       if(isNetworkAvailable() == true) {
+        //  if(isOnline() == true && isNetworkAvailable() == true) {
+        client.getHomeTimeLine(max_id, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                //deserialize JSON and create models, and load model data in listView
+                addAll(Tweet.fromJSONArray(response));
+                Log.d("populate - Home: ", response.toString());
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG JSONObject Fail:", errorResponse.toString());
+            }
+        });
        /*     if (listOfTweets.size() > 1) {
                 //sets max_id to for infinite scrolling
                 this.max_id = listOfTweets.get(listOfTweets.size() - 1).getUid();

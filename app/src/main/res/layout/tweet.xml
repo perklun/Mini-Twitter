@@ -10,10 +10,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingBottom="10dp" />
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        android:paddingLeft="0dp"
+        android:paddingBottom="0dp"
+        android:padding="6dp" />
 
     <TextView
         android:layout_width="wrap_content"

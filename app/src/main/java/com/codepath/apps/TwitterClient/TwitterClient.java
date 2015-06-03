@@ -33,7 +33,7 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	//Obtain home timeline from twitter, with count and since ID, success and failure handled by handler
-	public void getHomeTimeLine(AsyncHttpResponseHandler handler, long max_id){
+	public void getHomeTimeLine(long max_id, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", count);
@@ -54,14 +54,20 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	//Obtain user details
-	public void getUserDetails(AsyncHttpResponseHandler handler){
-		String apiUrl = getApiUrl("account/verify_credentials.json");
+	public void getUserDetails( String screen_name, AsyncHttpResponseHandler handler){
+		String apiUrl;
+		if(screen_name.length()<1){
+			apiUrl = getApiUrl("account/verify_credentials.json");
+		}
+		else{
+			apiUrl = getApiUrl("users/show.json?screen_name=" + screen_name);
+		}
 		getClient().get(apiUrl, null, handler);
 		Log.d("getUserDetails: ", apiUrl);
 	}
 
 	//Obtain user timeline
-	public void getUserTimeLine(String screenname, AsyncHttpResponseHandler handler, long max_id){
+	public void getUserTimeLine(String screenname, long max_id, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", count);
@@ -74,7 +80,7 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	//Obtain mentions timeline
-	public void getMentionsTimeLine(AsyncHttpResponseHandler handler, long max_id){
+	public void getMentionsTimeLine(long max_id, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", count);

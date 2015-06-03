@@ -1,6 +1,7 @@
 package com.codepath.apps.TwitterClient;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.TwitterClient.models.Tweet;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -39,7 +42,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         tvTweet.setText(tweet.getBody());
         tvRelativeTime.setText(tweet.getCreatedAt());
         ivProfilePic.setImageResource(android.R.color.transparent); //clear out old image
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).into(ivProfilePic);
+        Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.WHITE)
+                .borderWidthDp(2)
+                .cornerRadiusDp(5)
+                .oval(false)
+                .build();
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).fit().transform(transformation).into(ivProfilePic);
         return convertView;
     }
 }

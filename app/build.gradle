@@ -35,4 +35,5 @@ dependencies {
     //for swipe down refresh
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'com.makeramen:roundedimageview:2.0.1'
 }
