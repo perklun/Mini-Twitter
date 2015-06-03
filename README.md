@@ -1,10 +1,25 @@
 # Twitter Android App
 
-This is an Android application that uses the Twitter API to retrieve timeline and allow the user to compose messages. It is able to store tweets offline on a SQLite database to support tweets viewing offline. The network requests are made using Async requests.
+This is an Android application that uses the Twitter API to retrieve home and mention timelines. It also allow the user to compose messages. The network requests are made using Async requests. 
 
-Time spent: 10 hours spent in total
+Time spent: 20 hours spent in total
 
-Completed user stories:
+Completed assignment 4 stories:
+
+ * [x] Required: User can sign in to Twitter using OAuth login
+ * [x] Required: User can switch between Timeline and Mention views using tabs.
+ * [x] Required: User can view their home timeline tweets.
+ * [x] Required: User can view the recent mentions of their username.
+ * [x] Required: User can navigate to view their own profile
+ * [x] Required: User can see picture, tagline, # of followers, # of following, and tweets on their profile.
+ * [x] Required: User can click on the profile image in any tweet to see another user's profile.
+ * [x] Required: User can see picture, tagline, # of followers, # of following, and tweets of clicked user.
+ * [x] Required: Profile view should include that user's timeline
+ * [x] Required:User can infinitely paginate any of these timelines (home, mentions, user) by scrolling to the bottom
+ * [x] Advanced: When a network request is sent, user sees an indeterminate progress indicator
+ * [x] Advanced: Improve the user interface and theme the app to feel twitter branded
+
+Completed assignment 3 stories:
 
  * [x] Required: User can sign in to Twitter using OAuth login
  * [x] Required: User can view the tweets from their home timeline
@@ -17,16 +32,9 @@ Completed user stories:
  * [x] Required: User is taken back to home timeline with new tweet visible in timeline
  * [x] Advanced: While composing a tweet, user can see a character counter with characters remaining for tweet out of 140
  * [x] Advanced: Advanced: User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
- * [x] Advanced: User can open the twitter app offline and see last loaded tweets
  * [x] Advanced: Tweets are persisted into sqlite and can be displayed from the local DB
 
- 
-Notes:
-
-Spent some time making the UI work to give it a Twitter feel.
 
 Walkthrough of all user stories:
 
 ![Video Walkthrough](twitter.gif)
-
-
