@@ -14,12 +14,11 @@ Technial Details
 - astuetz:pagerslidingtabstrip is used to manage tabs
 
 Note: API Key and Secret need to be replace with your own key and secret
-
+```
 Mini-Twitter/app/src/main/java/com/codepath/apps/TwitterClient/
-
 22	public static final String REST_CONSUMER_KEY = "XXXXXX";
-
 23	public static final String REST_CONSUMER_SECRET = "XXXXXX";
+```
 
 Walkthrough
 ---
