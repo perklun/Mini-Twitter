@@ -1,4 +1,4 @@
-# Twitter Android App
+# Mini Twitter
 
 Description
 -----
