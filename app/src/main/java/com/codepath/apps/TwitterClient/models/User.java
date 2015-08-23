@@ -8,8 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by PerkLun on 5/23/2015.
- * deserialize the user json to an User object
+ * Model that represents a Twitter User
+ * Build for ORM
+ * Deserialize the user json to an User object
  */
 @Table(name = "User")
 public class User extends Model{
@@ -30,6 +31,12 @@ public class User extends Model{
     @Column(name = "background")
     private String background;
 
+    /**
+     * Construct a user from a JSON object
+     *
+     * @param object
+     * @return user
+     */
     public static User fromJSON(JSONObject object){
         User user = new User();
         try {
@@ -52,32 +59,72 @@ public class User extends Model{
         return user;
     }
 
+    /**
+     * Getter for user name
+     *
+     * @return name
+     */
     public String getName() {return name;
     }
 
+    /**
+     * Getter for user uid
+     *
+     * @return uid
+     */
     public long getUid() {
         return uid;
     }
 
+    /**
+     * Getter for user screenname
+     *
+     * @return screenName
+     */
     public String getScreenName() {
         return screenName;
     }
 
+    /**
+     * Getter for user profile photo url
+     *
+     * @return profileImageURL
+     */
     public String getProfileImageURL() {
         return profileImageURL;
     }
 
+    /**
+     * Getter for user tagline
+     *
+     * @return tagline
+     */
     public String getTagline() {
         return tagline;
     }
 
+    /**
+     * Getter for nunber of user follows as a string
+     *
+     * @return String.valueOf(followers)
+     */
     public String getFollowers() {
         return String.valueOf(followers);
     }
 
+    /**
+     * Getter for nunber of user following as a string
+     *
+     * @return String.valueOf(following)
+     */
     public String getFollowing() {
         return String.valueOf(following);
     }
 
+    /**
+     * Getter for return background URL as a string
+     *
+     * @return background
+     */
     public String getBackground() { return background;    }
 }

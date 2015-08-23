@@ -1,16 +1,12 @@
 package com.codepath.apps.TwitterClient.models;
 
-import android.text.format.DateUtils;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,10 +16,11 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by PerkLun on 5/23/2015.
- * represents attributes of tweet
- * Parse the JSON from twitter, encapsulate state logic or display logic
+ * Model that Represents attributes of tweet
+ * Parse the JSON from twitter, encapsulate state logic or display logic\
+ *Build to support ORM
  */
+
 @Table(name = "Tweet")
 public class Tweet extends Model {
 
@@ -36,11 +33,13 @@ public class Tweet extends Model {
     @Column (name = "createdAt")
     private String createdAt;
 
-    //default constructor for ActiveAndroid Model
+    /**
+     * default constructor for ActiveAndroid Model
+     */
     public Tweet(){
         super();
     }
-    //extract values from json and extract them
+    // Extract values from json and extract them
     public static Tweet fromJSON(JSONObject object){
         Tweet tweet = new Tweet();
         try {
@@ -55,9 +54,15 @@ public class Tweet extends Model {
         return tweet;
     }
 
+    /**
+     * Parse JSON array and create an arraylist of tweets
+     *
+     * @param array
+     * @return listOfTweets arraylist of tweets
+     */
     public static ArrayList<Tweet> fromJSONArray(JSONArray array){
         ArrayList<Tweet> listOfTweets = new ArrayList<Tweet>();
-        //iterate array
+        // Iterate through JSON array
         for(int i=0; i<array.length();i++){
             try {
                 JSONObject tweetJSONObject = array.getJSONObject(i);
@@ -67,13 +72,19 @@ public class Tweet extends Model {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                continue; //even if one tweet fails;
+                continue; // Even if one tweet fails;
             }
         }
         return listOfTweets;
     }
 
-    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+    /**
+     * Formats raw JSON date to relative date
+     * e.g. 1d, 10m
+     *
+     * @param rawJsonDate
+     * @return relativeDate
+     */
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -89,12 +100,12 @@ public class Tweet extends Model {
         return relativeDate;
     }
 
-    public static List<Tweet> getAll() {
-        // This is how you execute a query
-     //   return new Select().from(Tweet.class).orderBy("Name ASC").executeSingle();
-        return new Select().from(Tweet.class).orderBy("uid DESC").execute();
-    }
-
+    /**
+     * Helper method to get relative date
+     *
+     * @param inputdate
+     * @return date difference as a String
+     */
     public static String getDateDifferenceForDisplay(Date inputdate) {
         Calendar now = Calendar.getInstance();
         Calendar then = Calendar.getInstance();
@@ -122,18 +133,38 @@ public class Tweet extends Model {
         }
     }
 
+    /**
+     * Getter for tweet body
+     *
+     * @return body
+     */
     public String getBody() {
         return body;
     }
 
+    /**
+     * Getter for tweet Uid
+     *
+     * @return uid
+     */
     public long getUid() {
         return uid;
     }
 
+    /**
+     * Getter for tweet creation time
+     *
+     * @return createdAt
+     */
     public String getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * Getter for user object who created the tweet
+     *
+     * @return user
+     */
     public User getUser() {
         return user;
     }
