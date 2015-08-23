@@ -13,7 +13,7 @@ Technial Details
 - Users can sign in to Twitter using OAuth login
 - astuetz:pagerslidingtabstrip is used to manage tabs
 
-Note: API Key and Secret need to be replace with your own key and secret
+Note: API Key and Secret need to be replaced with your own key and secret
 ```
 Mini-Twitter/app/src/main/java/com/codepath/apps/TwitterClient/
 22	public static final String REST_CONSUMER_KEY = "XXXXXX";
