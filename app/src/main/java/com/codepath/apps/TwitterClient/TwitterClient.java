@@ -1,12 +1,8 @@
 package com.codepath.apps.TwitterClient;
 
 import org.scribe.builder.api.Api;
-
 import org.scribe.builder.api.TwitterApi;
-
 import android.content.Context;
-import android.util.Log;
-
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,8 +28,14 @@ public class TwitterClient extends OAuthBaseClient {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	//Obtain home timeline from twitter, with count and since ID, success and failure handled by handler
+	/**
+	 * Obtain home timeline from twitter, with count and since ID, success and failure handled by handler
+	 *
+	 * @param max_id
+	 * @param handler
+	 */
 	public void getHomeTimeLine(long max_id, AsyncHttpResponseHandler handler){
+
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", count);
@@ -41,19 +43,27 @@ public class TwitterClient extends OAuthBaseClient {
 			params.put("max_id", max_id);
 		}
 		getClient().get(apiUrl, params, handler);
-		Log.d("getHomeTimeLine: ", apiUrl + " max_id=" + max_id);
 	}
 
-	//Composing a tweet
+	/**
+	 * Makes API request to compose a tweet
+	 *
+	 * @param handler
+	 * @param tweet_text
+	 */
 	public void composeTweet(AsyncHttpResponseHandler handler, String tweet_text){
 		String apiUrl = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
 		params.put("status", tweet_text);
 		getClient().post(apiUrl, params, handler);
-		Log.d("composeTweet: ", apiUrl + " status: " + tweet_text);
 	}
 
-	//Obtain user details
+	/**
+	 * Makes API request to obtain user details
+	 *
+	 * @param screen_name
+	 * @param handler
+	 */
 	public void getUserDetails( String screen_name, AsyncHttpResponseHandler handler){
 		String apiUrl;
 		if(screen_name.length()<1){
@@ -63,10 +73,15 @@ public class TwitterClient extends OAuthBaseClient {
 			apiUrl = getApiUrl("users/show.json?screen_name=" + screen_name);
 		}
 		getClient().get(apiUrl, null, handler);
-		Log.d("getUserDetails: ", apiUrl);
 	}
 
-	//Obtain user timeline
+	/**
+	 * Makes a API request to obtain user timeline
+	 *
+	 * @param screenname
+	 * @param max_id
+	 * @param handler
+	 */
 	public void getUserTimeLine(String screenname, long max_id, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
@@ -76,10 +91,14 @@ public class TwitterClient extends OAuthBaseClient {
 			params.put("max_id", max_id);
 		}
 		getClient().get(apiUrl, params, handler);
-		Log.d("getUserTimeLine: ", apiUrl + " max_id=" + max_id);
 	}
 
-	//Obtain mentions timeline
+	/**
+	 * Makes a API request to obtain mentions timeline
+	 *
+	 * @param max_id
+	 * @param handler
+	 */
 	public void getMentionsTimeLine(long max_id, AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
@@ -88,6 +107,5 @@ public class TwitterClient extends OAuthBaseClient {
 			params.put("max_id", max_id);
 		}
 		getClient().get(apiUrl, params, handler);
-		Log.d("getMentionsTimeLine: ", apiUrl + " max_id=" + max_id);
 	}
 }

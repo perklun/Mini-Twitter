@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Created by PerkLun on 5/30/2015.
+ * Fragment that displays all the tweet in the Home timeline
  */
 public class HomeTimelineFragment extends TweetsListFragment {
 
@@ -40,46 +40,29 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 } else {
                     populateTimeLine(listOfTweets.get(listOfTweets.size() - 1).getUid() - 1);
                 }
-                Log.d("onLoadMore - Home: ", String.valueOf(listOfTweets.size()));
                 hideProgressBar();
             }
         });
         return v;
     }
 
-    //send API request to populate time and fill listview
+    /**
+     * Handler to send API request to twitter to retrieve home timeline
+     *
+     * @param max_id max id to retrieve tweets
+     */
     @Override
     public void populateTimeLine(long max_id) {
-        //       if(isNetworkAvailable() == true) {
-        //  if(isOnline() == true && isNetworkAvailable() == true) {
         client.getHomeTimeLine(max_id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                //deserialize JSON and create models, and load model data in listView
+                // Deserialize JSON and create models, and load model data in listView
                 addAll(Tweet.fromJSONArray(response));
-                Log.d("populate - Home: ", response.toString());
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG JSONObject Fail:", errorResponse.toString());
             }
         });
-       /*     if (listOfTweets.size() > 1) {
-                //sets max_id to for infinite scrolling
-                this.max_id = listOfTweets.get(listOfTweets.size() - 1).getUid();
-                tweetsAdapter.notifyDataSetChanged();
-            }
-            Log.d("IN method ", String.valueOf(listOfTweets.size()));
-            swipeContainer.setRefreshing(false);
-        }
-        else{
-           /* List<Tweet> old_list = Tweet.getAll();
-            if(old_list.size() > 1){
-                listOfTweets.addAll(old_list);
-                Toast.makeText(this, "Offline mode", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(this, "No previous tweets found", Toast.LENGTH_SHORT).show();
-            }*/
-//        }
     }
 }

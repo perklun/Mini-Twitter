@@ -17,8 +17,7 @@ import com.squareup.picasso.Transformation;
 import java.util.List;
 
 /**
- * Created by PerkLun on 5/23/2015.
- * taking the tweet objects and turning them into views
+ * Taking the tweet objects and turning them into views in each row of list
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
@@ -26,11 +25,18 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         super(context, android.R.layout.simple_list_item_1, tweets);
     }
 
-    //consider implementing viewholder pattern
+    /**
+     * Inflates view for each tweet
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Tweet tweet = getItem(position);
-        //find or inflate the template, if convertView is null, it means it is not being recycled, and therefore you need to inflate it
+        // Find or inflate the template, if convertView is null, it means it is not being recycled, and therefore you need to inflate it
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.tweet, parent, false); //false so you don't update first
         }
@@ -42,6 +48,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         tvTweet.setText(tweet.getBody());
         tvRelativeTime.setText(tweet.getCreatedAt());
         ivProfilePic.setImageResource(android.R.color.transparent); //clear out old image
+        // Adds rounded transformation
         Transformation transformation = new RoundedTransformationBuilder()
                 .borderColor(Color.WHITE)
                 .borderWidthDp(2)

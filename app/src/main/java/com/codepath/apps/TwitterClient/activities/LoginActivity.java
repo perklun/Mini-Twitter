@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
-
 import com.codepath.apps.TwitterClient.R;
 import com.codepath.apps.TwitterClient.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
+/**
+ * Activity that logs in to Twitter
+ */
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	@Override
@@ -27,8 +29,11 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
-	// OAuth authenticated successfully, launch primary authenticated activity
-	// i.e Display application "homepage"
+
+	/**
+	 * Methodd that launches TimeLineActivity
+	 * Displays a Toast upon successful login
+	 */
 	@Override
 	public void onLoginSuccess() {
 		Intent i = new Intent(this, TimeLineActivity.class);
@@ -37,17 +42,25 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		Toast.makeText(this, "Login Successful.", Toast.LENGTH_SHORT).show();
 	}
 
-	// OAuth authentication flow failed, handle the error
-	// i.e Display an error dialog or toast
+	/**
+	 * OAuth authentication flow failed, handle the error
+	 * i.e Display an error dialog or toast
+	 *
+	 * @param e
+	 */
 	@Override
 	public void onLoginFailure(Exception e) {
 		Toast.makeText(this, "Login Failed.", Toast.LENGTH_SHORT).show();
 		e.printStackTrace();
 	}
 
-	// Click handler method for the button used to start OAuth flow
-	// Uses the client to initiate OAuth authorization
-	// This should be tied to a button used to login
+	/**
+	 * Click handler method for the button used to start OAuth flow
+	 * Uses the client to initiate OAuth authorization
+	 * This should be tied to a button used to login
+	 *
+	 * @param view
+	 */
 	public void loginToRest(View view) {
 		if(isNetworkAvailable() == true && isOnline() == true ){
 			getClient().connect();
@@ -60,6 +73,11 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		}
 	}
 
+	/**
+	 * Checks if network is available
+	 *
+	 * @return true if network is available
+	 */
 	public Boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager
 				= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -67,6 +85,11 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 	}
 
+	/**
+	 * Checks if network is online
+	 *
+	 * @return true if network is available
+	 */
 	public Boolean isOnline() {
 		try {
 			Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.com");
@@ -79,6 +102,4 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		}
 		return false;
 	}
-
-
 }

@@ -6,18 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.codepath.apps.TwitterClient.EndlessScrollListener;
 import com.codepath.apps.TwitterClient.TwitterApplication;
 import com.codepath.apps.TwitterClient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
-
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Created by PerkLun on 5/30/2015.
+ * Fragment that displays all the tweet in the Mention timeline
  */
 public class MentionsTimelineFragment extends TweetsListFragment {
 
@@ -40,27 +38,24 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 } else {
                     populateTimeLine(listOfTweets.get(listOfTweets.size() - 1).getUid() - 1);
                 }
-                Log.d("onLoadMore - Mentions: ", String.valueOf(listOfTweets.size()));
                 hideProgressBar();
             }
         });
         return v;
     }
 
-    //send API request to populate time and fill listview
-    //JSON response starts with [ ] which means it is a JSONArray
+    /**
+     * Handler to send API request to twitter to retrieve home timeline
+     *
+     * @param max_id max id to retrieve tweets
+     */
     @Override
     public void populateTimeLine(long max_id) {
-        //       if(isNetworkAvailable() == true) {
-        //  if(isOnline() == true && isNetworkAvailable() == true) {
         client.getMentionsTimeLine(max_id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("populate - Mention: ", response.toString());
-                //deserialize JSON and create models, and load model data in listView
+                // Deserialize JSON and create models, and load model data in listView
                 addAll(Tweet.fromJSONArray(response));
-                //          tweetsAdapter.notifyDataSetChanged();
-                //         Log.d("DEBUG JSONARRAY List", listOfTweets.toString());
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {

@@ -27,7 +27,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 /**
- * Created by PerkLun on 5/30/2015.
+ * Fragment that displays the user's twitter profile
  */
 public class ProfileFragment extends Fragment {
 
@@ -39,20 +39,20 @@ public class ProfileFragment extends Fragment {
     protected TextView tvUserTag;
     protected TextView tvUserFollowers;
     protected TextView tvUserFollowing;
-    //to change actionbar title
+    // To change actionbar title
     private OnScreenNameAvailable listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String screen_name = getArguments().getString("screen_name");
-
+        // Initiate REST client to make API request to obtain user details
         client = TwitterApplication.getRestClient();
         client.getUserDetails(screen_name, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("getUserDetails: ", response.toString());
                 user = User.fromJSON(response);
+                // Create rounded transformation for user pic
                 Transformation transformation;
                 transformation = new RoundedTransformationBuilder()
                         .borderColor(Color.WHITE)
@@ -60,6 +60,7 @@ public class ProfileFragment extends Fragment {
                         .cornerRadiusDp(5)
                         .oval(false)
                         .build();
+                // Load user profile pic
                 Picasso.with(getActivity().getApplicationContext()).load(user.getProfileImageURL()).fit().transform(transformation).into(ivUserProfile);
                 if(user.getBackground() != null){
                     ivBanner.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -90,6 +91,12 @@ public class ProfileFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Instantiate fragment
+     *
+     * @param screen_name
+     * @return ProfileFragment
+     */
     public static ProfileFragment newInstance(String screen_name) {
         ProfileFragment fragmentDemo = new ProfileFragment();
         Bundle args = new Bundle();
@@ -98,12 +105,17 @@ public class ProfileFragment extends Fragment {
         return fragmentDemo;
     }
 
-    // Define the events that the fragment will use to communicate
+    /**
+     * Define the events that the fragment will use to communicate
+     */
     public interface OnScreenNameAvailable {
         public void onRssItemSelected(String link);
     }
 
-    // Store the listener (activity) that will have events fired once the fragment is attached
+    /**
+     *  Store the listener (activity) that will have events fired once the fragment is attached
+     * @param activity
+     */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
