@@ -19,8 +19,8 @@ public class TwitterClient extends OAuthBaseClient {
 
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
 	public static final String REST_URL = "https://api.twitter.com/1.1/";
-	public static final String REST_CONSUMER_KEY = "H6Bi3Iq57DgPMKgmTZzpHtWrN";
-	public static final String REST_CONSUMER_SECRET = "1JdoUwCubxtvOfZ5arP0Fd52cZVEpQDplBzvLqmmzgNNP4xBcR";
+	public static final String REST_CONSUMER_KEY = "XXXXXX";
+	public static final String REST_CONSUMER_SECRET = "XXXXXX";
 	public static final String REST_CALLBACK_URL = "oauth://cpSimpleTwitter"; //Change this in manifest)
 	public static final int count = 25;
 
